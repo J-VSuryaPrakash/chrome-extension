@@ -10,24 +10,28 @@ function Login(){
         const response = await fetch("http://localhost:8000/api/v1/user/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+            "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                email,
-                password
+            body: JSON.stringify({ 
+                email, 
+                password 
             }),
             credentials: "include"
         })
 
-        if(response){
-            const data = await response.json()
-            console.log(data);
-            if(data.statusCode === 200){
-                navigate("/dashboard")
+        if (response) {
+            const data = await response.json();
+
+            if (data.statusCode === 200) {
+            if (window.chrome && chrome.runtime) {
+                chrome.runtime.sendMessage({ type: "USER_LOGGED_IN" }, (res) => {
+                console.log("Extension responded:", res);
+                });
             }
-            
+            navigate("/dashboard");
+            }
         }
-    }
+        }
 
     return(
         <>
