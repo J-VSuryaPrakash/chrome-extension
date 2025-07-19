@@ -1,0 +1,55 @@
+# Dependencies
+/node_modules
+/npm-debug.log*
+.yarn-integrity
+.pnp.*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Build artifacts
+/dist
+/build
+/out
+/coverage
+/public/build # If frontend assets are built into backend public folder
+
+# Uploads
+# If you have a folder where users upload files, you might want to ignore it
+# /uploads
+# /media
+
+# Log files
+*.log
+logs/
+*.json.log # Example for JSON logs
+
+# OS-specific files
+.DS_Store # macOS
+Thumbs.db # Windows
+ehthumbs.db # Windows
+.directory # Linux
+
+# Editor directories and files
+.vscode/        # VSCode
+.idea/          # IntelliJ IDEA
+*.sublime-project # Sublime Text
+*.sublime-workspace # Sublime Text
+.history/       # VSCode Local History
+*.swp           # Vim swap files
+*.bak           # Backup files
+
+# NPM related
+package-lock.json # Only if you are using yarn and not npm
+yarn.lock         # Only if you are using npm and not yarn
+.cache/
+
+# Testing
+/test-results/ # Example for test reports
+
+# Production specific (if deployed with specific files)
+*.pem # Private keys (if not managed by deployment process)
