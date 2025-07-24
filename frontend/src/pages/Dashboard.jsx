@@ -1,69 +1,82 @@
-import { useState } from 'react';
-import DailyReport from '../components/DailyReport';
-import BlockedSites from '../components/BlockedSites';
-import Analytics from '../components/Analytics';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useState } from "react";
+import DailyReport from "../components/DailyReport";
+import BlockedSites from "../components/BlockedSites";
+import Analytics from "../components/Analytics";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-    const [activeTab, setActiveTab] = useState("report");
-    const navigate = useNavigate(); // Initialize useNavigate
+  const [activeTab, setActiveTab] = useState("report");
 
-    const handleLogout = async() => {
-        const response = await fetch("http://localhost:8000/api/v1/user/logout", {
-            method: "POST",
-            credentials: "include",
-        });
-        navigate('/');
-    };
+  const navigate = useNavigate();
 
-    return (
-        <>
-            <div className='w-screen h-screen bg-blue-950 flex justify-center items-center'>
-                <div className="container mx-auto px-4 py-6 max-w-4xl border border-gray-300 relative"> {/* Added 'relative' here */}
-                    {/* Logout Button */}
-                    <button
-                        onClick={handleLogout}
-                        className="absolute top-4 right-4 bg-red-500 rounded-lg px-4 py-2 text-white font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 hover:cursor-pointer"
-                    >
-                        Logout
-                    </button>
+  const handleLogout = async () => {
+    const response = await fetch("http://localhost:8000/api/v1/user/logout", {
+      method: "POST",
 
-                    <div className="flex justify-around mt-8"> {/* Added mt-8 to push content below logout button */}
-                        <button
-                            className={`rounded-2xl border px-3 py-2 text-white font-bold font-mono hover:cursor-pointer ${
-                                activeTab === "report" ? "bg-blue-600 border-blue-400" : "bg-blue-500 border-blue-300 hover:bg-blue-600"
-                            }`}
-                            onClick={() => setActiveTab("report")}
-                        >
-                            Daily Report
-                        </button>
-                        <button
-                            className={`rounded-2xl border px-3 py-2 text-white font-bold font-mono hover:cursor-pointer ${
-                                activeTab === "chart" ? "bg-blue-600 border-blue-400" : "bg-blue-500 border-blue-300 hover:bg-blue-600"
-                            }`}
-                            onClick={() => setActiveTab("chart")}
-                        >
-                            Analytics
-                        </button>
-                        <button
-                            className={`rounded-2xl border px-3 py-2 text-white font-bold font-mono hover:cursor-pointer ${
-                                activeTab === "blocked" ? "bg-blue-600 border-blue-400" : "bg-blue-500 border-blue-300 hover:bg-blue-600"
-                            }`}
-                            onClick={() => setActiveTab("blocked")}
-                        >
-                            Blocked Sites
-                        </button>
-                    </div>
+      credentials: "include",
+    });
 
-                    <div className='flex justify-center mt-5 border border-gray-300'>
-                        {activeTab === "report" && <DailyReport />}
-                        {activeTab === "blocked" && <BlockedSites />}
-                        {activeTab === "chart" && <Analytics />}
-                    </div>
-                </div>
+    navigate("/");
+  };
+
+  const tabs = [
+    { id: "report", label: "Daily Report", component: <DailyReport /> },
+    { id: "chart", label: "Analytics", component: <Analytics /> },
+    { id: "blocked", label: "Blocked Sites", component: <BlockedSites /> },
+  ];
+
+  return (
+    <div className="min-h-screen bg-dashboard-bg flex justify-center items-center p-4">
+      <div className="w-full max-w-5xl">
+        {/* Header with logout button */}
+
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={handleLogout}
+            className="bg-dashboard-danger hover:bg-dashboard-danger-hover text-dashboard-text font-semibold px-6 py-2.5 rounded-xl hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dashboard-danger focus:ring-opacity-50 hover:cursor-pointer"
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Main dashboard container */}
+
+        <div className="bg-dashboard-surface shadow-2xl overflow-hidden">
+          {/* Tab navigation */}
+
+          <div className="bg-dashboard-surface">
+            <div className="flex justify-center gap-1 p-6">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`relative px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? "bg-dashboard-primary text-dashboard-text shadow-lg scale-105 hover:cursor-pointer"
+                      : "bg-dashboard-surface hover:bg-dashboard-surface-hover text-dashboard-text-muted hover:text-dashboard-text hover:scale-102 hover:cursor-pointer"
+                  }`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+
+                  {activeTab === tab.id && (
+                    <div className="absolute inset-0 bg-dashboard-primary rounded-xl opacity-20 animate-pulse"></div>
+                  )}
+                </button>
+              ))}
             </div>
-        </>
-    );
+          </div>
+
+          {/* Content area */}
+
+          <div className="p-8 min-h-[500px] bg-dashboard-surface">
+            <div className="bg-dashboard-bg round-xl p-6 h-full">
+              {tabs.find((tab) => tab.id === activeTab)?.component}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;

@@ -5,9 +5,10 @@ import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 
 const logTimeForSite = asyncHandler(async (req, res) => {
-  const { sitename, siteurl, timeSpent } = req.body;
+  
+  const { siteName, siteUrl, timeSpent } = req.body;
 
-  if (!(sitename || siteurl)) {
+  if (!(siteName || siteUrl)) {
     throw new ApiError(400, "Site name or site url is required");
   }
 
@@ -26,7 +27,7 @@ const logTimeForSite = asyncHandler(async (req, res) => {
 
   if (report) {
     const site = report.visitedSite.find(
-      (site) => site.siteName === sitename && site.siteUrl === siteurl
+      (site) => site.siteName === siteName && site.siteUrl === siteUrl
     );
 
     if (site) {
@@ -35,8 +36,8 @@ const logTimeForSite = asyncHandler(async (req, res) => {
 
     } else {
       report.visitedSite.push({
-        siteName: sitename,
-        siteUrl: siteurl,
+        siteName: siteName,
+        siteUrl: siteUrl,
         timeSpent: parsedTimeSpent
       });
     }
@@ -48,8 +49,8 @@ const logTimeForSite = asyncHandler(async (req, res) => {
       date: today,
       visitedSite: [
         {
-          siteName: sitename,
-          siteUrl: siteurl,
+          siteName: siteName,
+          siteUrl: siteUrl,
           timeSpent: parsedTimeSpent
         }
       ]
